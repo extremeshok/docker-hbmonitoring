@@ -3,6 +3,8 @@
 set -e
 set -u
 
+XS_MONGOSERVER=${MONGOSERVER:-localhost}
+
 if [ "$HB_URL" == "" ] || [ "$HB_USERNAME" == "" ] || [ "$HB_PASSWORD" == "" ] ; then
   echo "ERROR: Missing either HB_URL, HB_USERNAME, HB_PASSWORD"
   echo "sleeping ......"
@@ -14,9 +16,9 @@ if [ -w "/home/nodemonit/uptime/config/default.yaml" ] ; then
     echo "Configuring"
     cat << EOF > /home/nodemonit/uptime/config/default.yaml
 mongodb:
-  server:   localhost
+  server:   $XS_MONGOSERVER
   database: uptime
-  connectionString:  mongodb://localhost/uptime
+  connectionString:  mongodb://$XS_MONGOSERVER/uptime
 
 monitor:
   hbURL: 'https://$HB_URL/'
@@ -42,8 +44,10 @@ EOF
 cat /home/nodemonit/uptime/config/default.yaml
 fi
 
-echo "Starting mongodb"
-/etc/init.d/mongod start
+if [ "$XS_MONGOSERVER" == "localhost" ] ; then
+  echo "Starting mongodb"
+  /etc/init.d/mongod start
+fi
 
 export nodeUser=nodemonit
 export NODE_ENV=production
