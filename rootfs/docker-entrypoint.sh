@@ -51,7 +51,6 @@ fi
 
 export nodeUser=nodemonit
 export NODE_ENV=production
-export PATH=/usr/local/bin:$PATH
 
 echo "Starting app.js"
-cd /home/nodemonit/uptime && /usr/local/bin/node app.js
+cd /home/nodemonit/uptime && /usr/bin/node app.js
