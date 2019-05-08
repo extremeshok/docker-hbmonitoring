@@ -3,15 +3,16 @@
 set -e
 set -u
 
-#ensure this only runs once per a startup
-if [ ! -f "/tmp/fixed_ownership" ] ; then
-  echo "Setting ownership of /var/www to www-data in the background"
-  echo "yes" > /tmp/fixed_ownership
-  chown -R --silent www-data:www-data /var/www &
+if [ "$HB_URL" == "" ] || [ "$HB_USERNAME" == "" ] || [ "$HB_PASSWORD" == "" ] ; then
+  echo "ERROR: Missing either HB_URL, HB_USERNAME, HB_PASSWORD"
+  echo "sleeping ......"
+  sleep 1d
+  exit 1
 fi
 
-
-cat << EOF > /home/nodemonit/uptime/config/default.yaml
+if [ -w "/home/nodemonit/uptime/config/default.yaml" ] ; then
+    echo "Configuring"
+    cat << EOF > /home/nodemonit/uptime/config/default.yaml
 mongodb:
   server:   localhost
   database: uptime
@@ -38,12 +39,8 @@ server:
   port:     8082
 
 EOF
-
 cat /home/nodemonit/uptime/config/default.yaml
-
-echo "launching app"
-
-sleep 10000000
+fi
 
 export nodeUser=nodemonit
 
