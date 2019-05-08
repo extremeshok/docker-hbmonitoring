@@ -11,6 +11,7 @@ sample docker-compose.yml
       - com.centurylinklabs.watchtower.enable=true
     environment:
       - TZ=${TZ:-UTC}
+      - MONGOSERVER=${MONGOSERVER:-}
       - HB_URL=${HB_URL:-}
       - HB_USERNAME=${HB_USERNAME:-}
       - HB_PASSWORD=${HB_PASSWORD:-}
