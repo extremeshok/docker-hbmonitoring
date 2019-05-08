@@ -42,8 +42,12 @@ EOF
 cat /home/nodemonit/uptime/config/default.yaml
 fi
 
-export nodeUser=nodemonit
+echo "Starting mongodb"
+/etc/init.d/mongod start
 
-cd /home/nodemonit/uptime
-PATH=/usr/local/bin:$PATH
-exec NODE_ENV=production forever start -a -d --sourceDir /home/nodemonit/uptime/ app.js
+export nodeUser=nodemonit
+export NODE_ENV=production
+export PATH=/usr/local/bin:$PATH
+
+echo "Starting app.js"
+cd /home/nodemonit/uptime && /usr/local/bin/node app.js
