@@ -4,7 +4,7 @@ set -e
 set -u
 
 XS_MONGO_HOST=${MONGO_HOST:-mongodb}
-XS_MONGO_PORT=${MONGO_PORT:-8081}
+XS_MONGO_PORT=${MONGO_PORT:-27017}
 
 if [ "$HB_URL" == "" ] || [ "$HB_USERNAME" == "" ] || [ "$HB_PASSWORD" == "" ] ; then
   echo "ERROR: Missing either HB_URL, HB_USERNAME, HB_PASSWORD"
