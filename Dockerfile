@@ -22,9 +22,8 @@ RUN echo "*** hbmonitoring ***" \
 && chown -R nodemonit:nodemonit /home/nodemonit/uptime \
 && cd /home/nodemonit/uptime && su nodemonit -c "npm install"
 
-RUN rm -f /tmp/* \
-&& rm -rf /tmp/*.* \
-&& yum clean -y all
+RUN rm -rf /tmp/* \
+&& rm -rf /tmp/*.*
 
 EXPOSE 8082
 
