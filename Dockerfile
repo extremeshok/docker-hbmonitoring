@@ -9,22 +9,22 @@ ENV LC_ALL=${OS_LOCALE}
 
 RUN yum install -y wget unzip gcc-c++ make nc
 
-RUN echo "*** node ***"
-RUN rpm -i https://rpm.nodesource.com/pub_0.10/el/6/x86_64/nodesource-release-el6-1.noarch.rpm
-RUN yum install -y nodejs
-RUN npm install -g forever
+RUN echo "*** node ***" \
+&& rpm -i https://rpm.nodesource.com/pub_0.10/el/6/x86_64/nodesource-release-el6-1.noarch.rpm \
+&& yum install -y nodejs \
+&& npm install -g forever
 
-RUN echo "*** hbmonitoring ***"
-RUN useradd -m nodemonit
-RUN wget -O /tmp/hbmonitoring.zip http://install.hostbillapp.com/hbmonitoring/hbmonitoring_remote.zip
-RUN mkdir -p /home/nodemonit/uptime
-RUN unzip -o /tmp/hbmonitoring.zip -d /home/nodemonit/uptime
-RUN chown -R nodemonit:nodemonit /home/nodemonit/uptime
-RUN cd /home/nodemonit/uptime && su nodemonit -c "npm install"
+RUN echo "*** hbmonitoring ***" \
+&& useradd -m nodemonit \
+&& wget -O /tmp/hbmonitoring.zip http://install.hostbillapp.com/hbmonitoring/hbmonitoring_remote.zip \
+&& mkdir -p /home/nodemonit/uptime \
+&& unzip -o /tmp/hbmonitoring.zip -d /home/nodemonit/uptime \
+&& chown -R nodemonit:nodemonit /home/nodemonit/uptime \
+&& cd /home/nodemonit/uptime && su nodemonit -c "npm install"
 
 RUN rm -f /tmp/* \
-rm -rf /tmp/*.* \
-yum clean -y all
+&& rm -rf /tmp/*.* \
+&& yum clean -y all
 
 EXPOSE 8082
 
