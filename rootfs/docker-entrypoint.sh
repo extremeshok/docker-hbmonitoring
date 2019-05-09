@@ -3,7 +3,8 @@
 set -e
 set -u
 
-XS_MONGOSERVER=${MONGOSERVER:-localhost}
+XS_MONGO_HOST=${MONGO_HOST:-mongodb}
+XS_MONGO_PORT=${MONGO_PORT:-8081}
 
 if [ "$HB_URL" == "" ] || [ "$HB_USERNAME" == "" ] || [ "$HB_PASSWORD" == "" ] ; then
   echo "ERROR: Missing either HB_URL, HB_USERNAME, HB_PASSWORD"
@@ -13,12 +14,12 @@ if [ "$HB_URL" == "" ] || [ "$HB_USERNAME" == "" ] || [ "$HB_PASSWORD" == "" ] ;
 fi
 
 if [ -w "/home/nodemonit/uptime/config/default.yaml" ] ; then
-    echo "Configuring"
-    cat << EOF > /home/nodemonit/uptime/config/default.yaml
+  echo "Configuring"
+  cat << EOF > /home/nodemonit/uptime/config/default.yaml
 mongodb:
-  server:   $XS_MONGOSERVER
+  server:   $XS_MONGO_HOST:$XS_MONGO_PORT
   database: uptime
-  connectionString:  mongodb://$XS_MONGOSERVER/uptime
+  connectionString:  mongodb://$XS_MONGO_HOST:$XS_MONGO_PORT/uptime
 
 monitor:
   hbURL: 'https://$HB_URL/'
@@ -44,13 +45,13 @@ EOF
 cat /home/nodemonit/uptime/config/default.yaml
 fi
 
-if [ "$XS_MONGOSERVER" == "localhost" ] ; then
-  echo "Starting mongodb"
-  /etc/init.d/mongod start
-fi
-
-export nodeUser=nodemonit
-export NODE_ENV=production
+while ! nc -z -v $XS_MONGO_HOST $XS_MONGO_PORT 2> /dev/null ; do
+  echo "Waiting for MONGODB ${XS_MONGO_HOST}:${XS_MONGO_PORT} ..."
+  sleep 2
+done
 
 echo "Starting app.js"
-cd /home/nodemonit/uptime && /usr/bin/node app.js
+export nodeUser=nodemonit
+export NODE_ENV=production
+cd /home/nodemonit/uptime
+/usr/bin/forever -f -d --sourceDir /home/nodemonit/uptime/ app.js

@@ -20,6 +20,11 @@ services:
       labels:
         - com.centurylinklabs.watchtower.enable=true
       command: --nohttpinterface
+      environment:
+          - MONGO_DATA_DIR=/data/db
+          - MONGO_LOG_DIR=/dev/null
+      volumes:
+          - ./data/db:/data/db
       restart: always
 
 ###### HBmonitoring
@@ -27,12 +32,14 @@ services:
       image: extremeshok/hbmonitoring:latest
       depends_on:
         - mongodb
-      command: sleep 1d
+      links:
+        - mongodb
       labels:
         - com.centurylinklabs.watchtower.enable=true
       environment:
         - TZ=${TZ:-UTC}
-        - MONGOSERVER=${MONGOSERVER:-}
+        - MONGO_HOST=${MONGO_HOST:-}
+        - MONGO_PORT=${MONGO_PORT:-}
         - HB_URL=${HB_URL:-}
         - HB_USERNAME=${HB_USERNAME:-}
         - HB_PASSWORD=${HB_PASSWORD:-}

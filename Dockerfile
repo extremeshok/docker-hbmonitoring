@@ -7,20 +7,13 @@ ENV LANG=${OS_LOCALE}
 ENV LANGUAGE=${OS_LOCALE}
 ENV LC_ALL=${OS_LOCALE}
 
-RUN yum install -y wget unzip gcc-c++ make
-# git openssl-devel redhat-lsb
-
-RUN echo "*** mongodb ***"
-RUN echo -e "[10gen]\nname=10gen Repository\nbaseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64\ngpgcheck=0\nenabled=1\n" >> /etc/yum.repos.d/10gen.repo
-RUN yum install -y mongo-10gen mongo-10gen-server
-RUN echo 'nohttpinterface = true' >> /etc/mongod.conf
-RUN chkconfig mongod on
+RUN yum install -y wget unzip gcc-c++ make nc
 
 RUN echo "*** node ***"
 RUN rpm -i https://rpm.nodesource.com/pub_0.10/el/6/x86_64/nodesource-release-el6-1.noarch.rpm
 RUN yum install -y nodejs
+RUN npm install -g forever
 
-#download script, unzip it
 RUN echo "*** hbmonitoring ***"
 RUN useradd -m nodemonit
 RUN wget -O /tmp/hbmonitoring.zip http://install.hostbillapp.com/hbmonitoring/hbmonitoring_remote.zip
@@ -30,7 +23,8 @@ RUN chown -R nodemonit:nodemonit /home/nodemonit/uptime
 RUN cd /home/nodemonit/uptime && su nodemonit -c "npm install"
 
 RUN rm -f /tmp/* \
-rm -rf /tmp/*.*
+rm -rf /tmp/*.* \
+yum clean -y all
 
 EXPOSE 8082
 

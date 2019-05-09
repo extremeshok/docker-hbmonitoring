@@ -1,6 +1,8 @@
 # docker-hbmonitoring
 centos6 docker container providing HBmonitoring
 
+## Requires Mongodb server
+
 ## Usage via docker-compose
 sample docker-compose.yml
 ```
@@ -11,7 +13,8 @@ sample docker-compose.yml
       - com.centurylinklabs.watchtower.enable=true
     environment:
       - TZ=${TZ:-UTC}
-      - MONGOSERVER=${MONGOSERVER:-}
+      - MONGO_HOST=${MONGO_HOST:-}
+      - MONGO_PORT=${MONGO_PORT:-}
       - HB_URL=${HB_URL:-}
       - HB_USERNAME=${HB_USERNAME:-}
       - HB_PASSWORD=${HB_PASSWORD:-}
