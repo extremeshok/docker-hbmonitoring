@@ -16,7 +16,7 @@ services:
 
 ###### Mongodb
     mongodb:
-      image: mongo:2.6
+      image: mongo:4.2
       labels:
         - com.centurylinklabs.watchtower.enable=true
       command: --nohttpinterface

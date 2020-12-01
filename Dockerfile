@@ -1,4 +1,4 @@
-FROM centos:6
+FROM centos:8
 MAINTAINER Adrian Kriel <admin@extremeshok.com>
 
 ENV OS_LOCALE="en_US.UTF-8"
@@ -7,7 +7,13 @@ ENV LANG=${OS_LOCALE}
 ENV LANGUAGE=${OS_LOCALE}
 ENV LC_ALL=${OS_LOCALE}
 
-RUN yum install -y wget unzip gcc-c++ make nc
+RUN dnf -y module enable nodejs:10
+
+RUN dnf -y install nodejs redhat-lsb wget unzip
+
+RUN useradd -m nodemonit
+
+RUN npm install forever -g
 
 RUN echo "*** node ***" \
 && rpm -i https://rpm.nodesource.com/pub_0.10/el/6/x86_64/nodesource-release-el6-1.noarch.rpm \
@@ -22,8 +28,10 @@ RUN echo "*** hbmonitoring ***" \
 && chown -R nodemonit:nodemonit /home/nodemonit/uptime \
 && cd /home/nodemonit/uptime && su nodemonit -c "npm install"
 
-RUN rm -rf /tmp/* \
-&& rm -rf /tmp/*.*
+RUN rm -f /tmp/hbmonitoring.zip
+
+RUN cd /home/nodemonit/uptime \
+&& su nodemonit -c "npm install"
 
 EXPOSE 8082
 

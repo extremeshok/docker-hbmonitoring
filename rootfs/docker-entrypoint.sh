@@ -53,5 +53,14 @@ done
 echo "Starting app.js"
 export nodeUser=nodemonit
 export NODE_ENV=production
+
 cd /home/nodemonit/uptime
-/usr/bin/forever -f -d --sourceDir /home/nodemonit/uptime/ app.js
+
+/usr/local/bin/forever start \
+--pidFile /home/nodemonit/forever-initd-hbmonitoring.pid \
+-l /home/nodemonit/forever-initd-hbmonitoring.log -a -d \
+--sourceDir /home/nodemonit/uptime/ \
+--workingDir /home/nodemonit/uptime/ \
+--uid hbmonitoring \
+-o  /home/nodemonit/forever-initd-hbmonitoring.log \
+app.js
