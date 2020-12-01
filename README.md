@@ -15,12 +15,12 @@ sample docker-compose.yml
     labels:
       - com.centurylinklabs.watchtower.enable=true
     environment:
-      - TZ=${TZ:-UTC}
-      - MONGO_HOST=${MONGO_HOST:-}
-      - MONGO_PORT=${MONGO_PORT:-}
-      - HB_URL=${HB_URL:-}
-      - HB_USERNAME=${HB_USERNAME:-}
-      - HB_PASSWORD=${HB_PASSWORD:-}
+      - TZ=UTC
+      - MONGO_HOST=mongodb
+      - MONGO_PORT=27017
+      - HB_URL=${HB_URL}
+      - HB_USERNAME=${HB_USERNAME}
+      - HB_PASSWORD=${HB_PASSWORD}
     ports:
       - 8082:8082
     restart: always

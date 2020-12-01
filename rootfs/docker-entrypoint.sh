@@ -13,36 +13,40 @@ if [ "$HB_URL" == "" ] || [ "$HB_USERNAME" == "" ] || [ "$HB_PASSWORD" == "" ] ;
   exit 1
 fi
 
-if [ -w "/home/nodemonit/uptime/config/default.yaml" ] ; then
+if [ -w "/home/nodemonit/uptime/config/default.yml" ] ; then
   echo "Configuring"
-  cat << EOF > /home/nodemonit/uptime/config/default.yaml
-mongodb:
-  server:   $XS_MONGO_HOST:$XS_MONGO_PORT
-  database: uptime
-  connectionString:  mongodb://$XS_MONGO_HOST:$XS_MONGO_PORT/uptime
+  cat << EOF > /home/nodemonit/uptime/config/default.yml
+  mongodb:
+    server:   $XS_MONGO_HOST:$XS_MONGO_PORT
+    database: uptime
+    connectionString:  mongodb://$XS_MONGO_HOST:$XS_MONGO_PORT/uptime
 
-monitor:
-  hbURL: 'https://$HB_URL/'
-  api_username: $HB_USERNAME
-  api_password: $HB_PASSWORD
-  name:                   origin
-  apiUrl:                 'http://localhost:8082/api' # must be accessible without a proxy
-  pollingInterval:        10000      # ten seconds
-  timeout:                5000       # five seconds
-  userAgent:              HBMonitoring/1.0
+  monitor:
+    hbURL: 'https://$HB_URL/'
+    api_username: $HB_USERNAME
+    api_password: $HB_PASSWORD
+    name:                   origin
+    apiUrl:                 'http://localhost:8082/api' # must be accessible without a proxy
+    pollingInterval:        10000      # ten seconds
+    timeout:                5000       # five seconds
+    userAgent:              HBMonitoring/1.0
 
-analyzer:
-  updateInterval:         60000      # one minute
-  qosAggregationInterval: 600000     # ten minutes
-  pingHistory:            8035200000 # three months
+  analyzer:
+    updateInterval:         60000      # one minute
+    qosAggregationInterval: 600000     # ten minutes
+    pingHistory:            8035200000 # three months
 
-autoStartMonitor: true
+  autoStartMonitor: true
 
-server:
-  port:     8082
+  server:
+    port:     8082
+
+  verbose: true # only used in dev
 
 EOF
-cat /home/nodemonit/uptime/config/default.yaml
+
+cat /home/nodemonit/uptime/config/default.yml
+
 fi
 
 while ! nc -z -v $XS_MONGO_HOST $XS_MONGO_PORT 2> /dev/null ; do
@@ -56,6 +60,6 @@ export NODE_ENV=production
 
 cd /home/nodemonit/uptime
 
-echo /usr/local/bin/forever -f -d --sourceDir /home/nodemonit/uptime/ --workingDir /home/nodemonit/uptime/ --uid hbmonitoring app.js
+/usr/local/bin/forever -f -d --sourceDir /home/nodemonit/uptime/ --workingDir /home/nodemonit/uptime/ --uid hbmonitoring app.js
 
 sleep 1d
