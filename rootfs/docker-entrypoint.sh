@@ -15,7 +15,7 @@ fi
 
 if [ -w "/home/nodemonit/uptime/config/default.yml" ] ; then
   echo "Configuring"
-  cat << EOF > /home/nodemonit/uptime/config/default.yml
+cat << EOF > "/home/nodemonit/uptime/config/default.yml"
   mongodb:
     server:   $XS_MONGO_HOST:$XS_MONGO_PORT
     database: uptime
@@ -44,9 +44,9 @@ if [ -w "/home/nodemonit/uptime/config/default.yml" ] ; then
   verbose: true # only used in dev
 
 EOF
-
-cat /home/nodemonit/uptime/config/default.yml
-
+  cat /home/nodemonit/uptime/config/default.yml
+else
+  echo "Did not configure"
 fi
 
 while ! nc -z -v $XS_MONGO_HOST $XS_MONGO_PORT 2> /dev/null ; do
@@ -60,6 +60,5 @@ export NODE_ENV=production
 
 cd /home/nodemonit/uptime
 
+echo "Launching"
 /usr/local/bin/forever -f -d --sourceDir /home/nodemonit/uptime/ --workingDir /home/nodemonit/uptime/ --uid hbmonitoring app.js
-
-sleep 1d
