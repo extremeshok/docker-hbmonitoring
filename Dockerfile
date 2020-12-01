@@ -8,7 +8,7 @@ ENV LANGUAGE=${OS_LOCALE}
 
 RUN dnf -y module enable nodejs:10
 
-RUN dnf -y install nodejs redhat-lsb wget unzip
+RUN dnf -y install nodejs redhat-lsb wget unzip nmap
 
 RUN npm install forever -g
 
