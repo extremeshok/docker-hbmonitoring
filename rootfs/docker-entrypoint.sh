@@ -56,4 +56,6 @@ export NODE_ENV=production
 
 cd /home/nodemonit/uptime
 
-/usr/local/bin/forever -f -d --sourceDir /home/nodemonit/uptime/ --workingDir /home/nodemonit/uptime/ --uid hbmonitoring app.js
+echo /usr/local/bin/forever -f -d --sourceDir /home/nodemonit/uptime/ --workingDir /home/nodemonit/uptime/ --uid hbmonitoring app.js
+
+sleep 1d
