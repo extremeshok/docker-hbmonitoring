@@ -5,13 +5,10 @@ ENV OS_LOCALE="en_US.UTF-8"
 
 ENV LANG=${OS_LOCALE}
 ENV LANGUAGE=${OS_LOCALE}
-ENV LC_ALL=${OS_LOCALE}
 
 RUN dnf -y module enable nodejs:10
 
 RUN dnf -y install nodejs redhat-lsb wget unzip
-
-RUN useradd -m nodemonit
 
 RUN npm install forever -g
 
